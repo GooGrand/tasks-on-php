@@ -22,14 +22,16 @@ function correct_data($sheet) {
     $finals = [];
 // Разделить по группам (пробел) номер, (улица, дорога, эйв, плейс, вообще еще есть court (ct)), город, штат (2 буквы), zip
     foreach($sheet as $line){
-        $mistypes = ['.', ',', '&', ];
-        $line =str_replace($mistypes, '', $line);
         $words = preg_split("/[\s,]+/", $line);
+        $mistypes = ['.', ',', '&', ' ', '.' ];     // Это нужно только в том случае, если у нас одиночная точка. Для третьего случая это все ломает
         foreach($words as $word){
-            str_replace(' ', '', $word);
             trim($word, ", .:!?/");
+            $word = str_replace($mistypes, '', $word);
             strtolower($word);
             ucfirst($word);
+            if(strlen($word) == 0){
+                unset($words[$word]);
+            }
         }
 
         // echo implode(' ', $words);
