@@ -22,14 +22,14 @@ function correct_data($sheet) {
     $finals = [];
 // Разделить по группам (пробел) номер, (улица, дорога, эйв, плейс, вообще еще есть court (ct)), город, штат (2 буквы), zip
     foreach($sheet as $line){
-        $words = preg_split("/[\s,]+/", $line);
-        $mistypes = ['.', ',', '&', ' ', '.' ];     // Это нужно только в том случае, если у нас одиночная точка. Для третьего случая это все ломает
+        $words = preg_split("/[\s,\.]+/", $line);
+        $mistypes = array('.', ',', '&', ' ' );     // Это нужно только в том случае, если у нас одиночная точка. Для третьего случая это все ломает
         foreach($words as $word){
             trim($word, ", .:!?/");
             $word = str_replace($mistypes, '', $word);
             strtolower($word);
             ucfirst($word);
-            if(strlen($word) == 0){
+            if(empty($word)){
                 unset($words[$word]);
             }
         }
@@ -50,9 +50,7 @@ function correct_data($sheet) {
 
         // echo implode(' ', $words);
         echo strlen(end($words));
-        foreach($words as $word){
-            echo 'Word is '.$word . '  ';
-        }
+        
 
         if(strlen(end($words)) != 2){ 
             if(strlen(end($words)) == 0) {
@@ -69,7 +67,9 @@ function correct_data($sheet) {
 // Далее есть набор слов, часть которых относится к улице, другая - к городу
 // Починить, в массив
     }
+    return $finals;
+
 
 // Массивом запостить в гугл
 }
-echo correct_data($sheet);
+echo implode(' ', correct_data($sheet));
