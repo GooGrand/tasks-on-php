@@ -106,6 +106,10 @@ function correctAddresses($spreadsheetId, $range_read, $range_write)
             // $json_array = explode(']', $json_string);
             // $address = str_replace($filter_array, '', $json_array[24]);  // Пробовал перебирать массив, но результат зависел от запроса
             $address_with_tail = stristr($json_string, ',[2,[["');
+            if(!$address_with_tail) {
+                echo 'Invalid address';
+                return false;
+            }
             $address_with_needle = stristr($address_with_tail, ', USA"', true);
             $address = str_replace(',[2,[["', '', $address_with_needle);
             $row_array = [$address];
