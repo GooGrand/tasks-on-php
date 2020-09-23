@@ -37,9 +37,8 @@ foreach($sheet as $postal)
 {
     $url = prepareUrl($postal);
     $json_string = getPageByUrl($url);
-    // echo $url;
-    $json_array = explode(']', $json_string);
-    // $address = str_replace($filter_array, '', $json_array[24]);
+    // $json_array = explode(']', $json_string);
+    // $address = str_replace($filter_array, '', $json_array[24]);  // Пробовал перебирать массив, но результат зависел от запроса
     $address_with_tail = stristr($json_string, ',[2,[["');
     $address_with_needle = stristr($address_with_tail, ', USA"', true);
     $address = str_replace(',[2,[["', '', $address_with_needle);
