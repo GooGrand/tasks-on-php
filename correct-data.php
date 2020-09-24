@@ -1,6 +1,8 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
 
+// credentials.json помещается в корень проекта
+
 $spreadsheetId = '1emPPR3TyZFDqMLnPk92_nHxUp5vQ8eYpXpukmEnwhsQ'; //ID нужного листа
 $range_read = 'Sheet1';
 $range_write = 'B1';
@@ -106,12 +108,14 @@ function correctAddresses($spreadsheetId, $range_read, $range_write)
             // $json_array = explode(']', $json_string);
             // $address = str_replace($filter_array, '', $json_array[24]);  // Пробовал перебирать массив, но результат зависел от запроса
             $address_with_tail = stristr($json_string, ',[2,[["');
-            if(!$address_with_tail) {
-                echo 'Invalid address';
-                return false;
-            }
             $address_with_needle = stristr($address_with_tail, ', USA"', true);
             $address = str_replace(',[2,[["', '', $address_with_needle);
+            if(!$address_with_needle) {
+                $address = 'Non american address';
+            }
+            if (!$address_with_tail) {
+                $address = 'Incorrect address';
+            }
             $row_array = [$address];
             array_push($corrected_values, $row_array);
         }
